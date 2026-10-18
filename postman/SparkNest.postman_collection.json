@@ -1,0 +1,200 @@
+{
+  "info": {
+    "name": "SparkNest",
+    "description": "SparkNest capstone: 3 custom REST scenarios + 2 Composite API requests.\nSet instanceUrl and accessToken in the collection variables (run: sf org display --target-org <alias>).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "instanceUrl",
+      "value": "https://orgfarm-14c328254a-dev-ed.develop.my.salesforce.com"
+    },
+    {
+      "key": "accessToken",
+      "value": "PASTE_ACCESS_TOKEN_HERE"
+    },
+    {
+      "key": "apiVersion",
+      "value": "64.0"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. REST - New customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"new.customer.{{$timestamp}}@example.com\",\n  \"firstName\": \"Divya\",\n  \"lastName\": \"Menon\",\n  \"phone\": \"+91 90000 20001\",\n  \"city\": \"Bengaluru\",\n  \"subject\": \"Interested in SparkNest Pulse Smartwatch\",\n  \"enquiryType\": \"Product Enquiry\",\n  \"customerBudget\": 15000,\n  \"source\": \"Website\",\n  \"priority\": \"Medium\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{instanceUrl}}/services/apexrest/SparkNestEnquiryAPI",
+          "host": [
+            "{{instanceUrl}}"
+          ],
+          "path": [
+            "services",
+            "apexrest",
+            "SparkNestEnquiryAPI"
+          ]
+        },
+        "description": "Expected: 200, success true, contactCreated true, contactId + enquiryId returned."
+      }
+    },
+    {
+      "name": "2. REST - Existing customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"ananya.reddy@example.com\",\n  \"subject\": \"Question about Care Plus plan\",\n  \"enquiryType\": \"Care Plan Enquiry\",\n  \"planDuration\": \"1 Year\",\n  \"customerBudget\": 4000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{instanceUrl}}/services/apexrest/SparkNestEnquiryAPI",
+          "host": [
+            "{{instanceUrl}}"
+          ],
+          "path": [
+            "services",
+            "apexrest",
+            "SparkNestEnquiryAPI"
+          ]
+        },
+        "description": "Email matches a loaded Contact (ananya.reddy@example.com). Expected: 200, contactCreated false, new Enquiry only."
+      }
+    },
+    {
+      "name": "3. REST - Missing email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"No\",\n  \"lastName\": \"Email\",\n  \"subject\": \"Enquiry without an email address\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{instanceUrl}}/services/apexrest/SparkNestEnquiryAPI",
+          "host": [
+            "{{instanceUrl}}"
+          ],
+          "path": [
+            "services",
+            "apexrest",
+            "SparkNestEnquiryAPI"
+          ]
+        },
+        "description": "Expected: HTTP 400 with error 'Email is required'."
+      }
+    },
+    {
+      "name": "4. Composite - B2B onboarding (success)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"allOrNone\": true,\n  \"compositeRequest\": [\n    {\n      \"method\": \"POST\",\n      \"url\": \"/services/data/v{{apiVersion}}/sobjects/Contact\",\n      \"referenceId\": \"newContact\",\n      \"body\": {\n        \"FirstName\": \"Arvind\",\n        \"LastName\": \"Rao\",\n        \"Email\": \"b2b.{{$timestamp}}@example.com\",\n        \"Phone\": \"+91 90000 30001\",\n        \"MailingCity\": \"Hyderabad\"\n      }\n    },\n    {\n      \"method\": \"POST\",\n      \"url\": \"/services/data/v{{apiVersion}}/sobjects/Enquiry__c\",\n      \"referenceId\": \"newEnquiry\",\n      \"body\": {\n        \"Name\": \"B2B onboarding enquiry\",\n        \"Contact__c\": \"@{newContact.id}\",\n        \"Enquiry_Type__c\": \"Product Enquiry\",\n        \"Customer_Budget__c\": 25000\n      }\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{instanceUrl}}/services/data/v{{apiVersion}}/composite",
+          "host": [
+            "{{instanceUrl}}"
+          ],
+          "path": [
+            "services",
+            "data",
+            "v{{apiVersion}}",
+            "composite"
+          ]
+        },
+        "description": "allOrNone true. Contact created, then Enquiry linked via @{newContact.id}. Expected: 200, both 201 responses."
+      }
+    },
+    {
+      "name": "5. Composite - Rollback test (budget below 1000)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"allOrNone\": true,\n  \"compositeRequest\": [\n    {\n      \"method\": \"POST\",\n      \"url\": \"/services/data/v{{apiVersion}}/sobjects/Contact\",\n      \"referenceId\": \"newContact\",\n      \"body\": {\n        \"FirstName\": \"Arvind\",\n        \"LastName\": \"Rao\",\n        \"Email\": \"rollback.{{$timestamp}}@example.com\",\n        \"Phone\": \"+91 90000 30001\",\n        \"MailingCity\": \"Hyderabad\"\n      }\n    },\n    {\n      \"method\": \"POST\",\n      \"url\": \"/services/data/v{{apiVersion}}/sobjects/Enquiry__c\",\n      \"referenceId\": \"newEnquiry\",\n      \"body\": {\n        \"Name\": \"B2B onboarding enquiry\",\n        \"Contact__c\": \"@{newContact.id}\",\n        \"Enquiry_Type__c\": \"Product Enquiry\",\n        \"Customer_Budget__c\": 500\n      }\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{instanceUrl}}/services/data/v{{apiVersion}}/composite",
+          "host": [
+            "{{instanceUrl}}"
+          ],
+          "path": [
+            "services",
+            "data",
+            "v{{apiVersion}}",
+            "composite"
+          ]
+        },
+        "description": "Enquiry fails (budget 500), so allOrNone rolls the Contact back too. Verify no Contact with this email exists."
+      }
+    }
+  ]
+}

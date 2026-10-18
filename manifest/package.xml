@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types><members>Enquiry__c</members><members>Enquiry_Product__c</members><name>CustomObject</name></types>
+    <types><members>Product2.SKU__c</members><name>CustomField</name></types>
+    <types><members>View_Customer_Budget</members><name>CustomPermission</name></types>
+    <types><members>Senior_Sales_Rep</members><name>PermissionSet</name></types>
+    <types><members>SparkNest Sales Rep</members><members>SparkNest Support Agent</members><name>Profile</name></types>
+    <types><members>SparkNest_Sales</members><members>SparkNest_Support</members><name>CustomApplication</name></types>
+    <types><members>Enquiry__c</members><members>Enquiry_Product__c</members><name>CustomTab</name></types>
+    <types><members>Enquiry_Record_Page</members><name>FlexiPage</name></types>
+    <types><members>Enquiry__c-Enquiry Layout</members><members>Enquiry_Product__c-Enquiry Product Interest Layout</members><name>Layout</name></types>
+    <types><members>*</members><name>Role</name></types>
+    <types><members>Care_Plan_Support</members><members>General_Support</members><name>Queue</name></types>
+    <types><members>Enquiry__c</members><name>SharingRules</name></types>
+    <types><members>Contact</members><name>MatchingRules</name></types>
+    <types><members>*</members><name>DuplicateRule</name></types>
+    <types><members>EnquiryService</members><members>EnquiryProductService</members><members>EnquiryProductServiceTest</members><members>TestDataFactory</members><name>ApexClass</name></types>
+    <types><members>EnquiryProductTrigger</members><name>ApexTrigger</name></types>
+    <version>64.0</version>
+</Package>

@@ -1,0 +1,9 @@
+Name,ProductCode,SKU__c,Family,Description,IsActive
+SparkNest Pulse Smartwatch,SN-PD-001,SN-PD-001,Personal Devices,Fitness and notification smartwatch with 7-day battery,TRUE
+SparkNest Air Earbuds,SN-PD-002,SN-PD-002,Personal Devices,Wireless earbuds with active noise cancellation,TRUE
+SparkNest Hub Smart Speaker,SN-SH-001,SN-SH-001,Smart Home,Voice-controlled speaker and smart home hub,TRUE
+SparkNest Glow Smart Bulb Kit,SN-SH-002,SN-SH-002,Smart Home,Pack of 4 app-controlled colour bulbs,TRUE
+SparkNest Fast Charger 65W,SN-AC-001,SN-AC-001,Accessories,65W USB-C GaN fast charger,TRUE
+SparkNest Protective Case,SN-AC-002,SN-AC-002,Accessories,Shock-resistant case for SparkNest devices,TRUE
+SparkNest Care Plus - Annual,SN-CP-001,SN-CP-001,Annual Care Plans,Annual plan: accidental damage cover and priority support,TRUE
+SparkNest Care Max - Annual,SN-CP-002,SN-CP-002,Annual Care Plans,"Annual plan: damage cover, battery replacement and home pickup",TRUE

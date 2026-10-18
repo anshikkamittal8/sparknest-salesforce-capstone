@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Budget_Minimum</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(Customer_Budget__c)), Customer_Budget__c &lt; 1000)</errorConditionFormula>
+    <errorDisplayField>Customer_Budget__c</errorDisplayField>
+    <errorMessage>Customer budget must be at least ₹1,000</errorMessage>
+</ValidationRule>
