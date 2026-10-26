@@ -1,4 +1,13 @@
-public class EnquiryProductService {
+/**
+ * Keeps Enquiry__c.Total_Products_Interested__c correct.
+ * Needed because Enquiry_Product__c uses Lookups (not Master-Detail),
+ * so a standard Roll-Up Summary field is not available.
+ * Runs "without sharing" so the count stays right even when the user
+ * who edits a junction record cannot edit the parent Enquiry.
+ * Bulk-safe: one aggregate query and one update per transaction.
+ */
+public without sharing class EnquiryProductService {
+
     public static void recalculate(List<Enquiry_Product__c> newRecords, Map<Id, Enquiry_Product__c> oldMap) {
         Set<Id> enquiryIds = new Set<Id>();
 
